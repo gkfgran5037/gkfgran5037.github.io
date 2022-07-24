@@ -1,7 +1,7 @@
 # main links
-main:
-  - title: "Quick-Start Guide"
-    url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
+#main:
+  #- title: "Quick-Start Guide"
+  #  url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
   # - title: "About"
   #   url: https://mmistakes.github.io/minimal-mistakes/about/
   # - title: "Sample Posts"
@@ -10,3 +10,24 @@ main:
   #   url: /collection-archive/
   # - title: "Sitemap"
   #   url: /sitemap/
+sidebar-category:
+  - title: "Java"
+    children:
+      - title: "자료구조"
+        url: "/dataStructure"
+      - title: "알고리즘"
+        url:  "/algorithmPS"
+  - title: "Spring"
+    children:
+      - title: "Spring MVC"
+        url: "/springMVC"
+  - title: "Project"
+    children:
+      - title: "프로젝트1"
+        url: "/devPrj1"
+  - title: "Etc"
+    children:
+      - title: "Error"
+        url: "/errorMemo"
+      - title: "Eclipse"
+        url: "/eclipseMemo"

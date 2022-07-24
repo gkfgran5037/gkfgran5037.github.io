@@ -20,7 +20,7 @@ title                    : "윰쯔 개발 블로그"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "Yum"
-description              : "An tech study blog."
+description              : ""
 url                      : "https://gkfgran5037.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -289,3 +289,5 @@ defaults:
       comments: # true
       share: true
       related: true
+      sidebar:
+        nav: "sidebar-category"
