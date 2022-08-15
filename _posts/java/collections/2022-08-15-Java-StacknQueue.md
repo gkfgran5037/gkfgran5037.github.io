@@ -196,3 +196,5 @@ Queue<Integer> q = new PriorityQueue<>();
 		}
 ```
 
+##### [참고 강의 : 남궁성의 정석코딩](https://www.youtube.com/watch?v=ktvhRSRohR4&list=PLW2UjW795-f6xWA2_MUhEVgPauhGl3xIp&index=123)
+##### [참고 서적 : 자바로 배우는 쉬운 자료구조](http://www.kyobobook.co.kr/product/detailViewKor.laf?mallGb=KOR&ejkGb=KOR&barcode=9788998756420)
