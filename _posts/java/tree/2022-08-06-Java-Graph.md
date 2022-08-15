@@ -1,5 +1,5 @@
 ---
-title: "JAVA Tree"
+title: "JAVA Graph"
 categories:
   - dataStructure
 ---
