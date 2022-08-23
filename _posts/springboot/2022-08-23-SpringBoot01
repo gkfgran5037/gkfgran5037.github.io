@@ -1,0 +1,62 @@
+---
+title:  "SpringBoot 01 Gradle 작성"
+categories:
+  - springMVC
+---
+
+## Gradle
+빌드 자동화 시스템
+
+<br/>
+<img src="https://user-images.githubusercontent.com/42172353/186183078-d3f205ff-def5-4260-b27e-7051fe307865.png" width="80%"/>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+---
+<br/>
+
+## build.gradle
+
+<br/>
+
+```java
+plugins {
+	id 'org.springframework.boot' version '2.7.1'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE' // 스프링 부트의 의존성들을 관리해주는 플러그인
+	id 'java'
+	id 'war' // JSP를 실행하기 위해서 Packaging은 war로 설정
+}
+
+group = 'com.demo'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'  // 자바 버전
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+// 의존성들을 받는 원격 저장소
+repositories {
+	mavenCentral()
+    jcenter()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+```
+
