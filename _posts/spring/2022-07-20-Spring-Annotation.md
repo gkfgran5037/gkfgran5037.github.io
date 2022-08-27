@@ -40,10 +40,8 @@ public class ServletApplication {
 
 
 ---
----
-<br/>
-
 # 반환 형식
+<br/>
 
 ## @RestController
 컨트롤러를 JSON을 반환하는 컨트롤러로 만들어 줌
@@ -71,10 +69,8 @@ public class HelloController {
 
 
 ---
----
+# API
 <br/>
-
-# URL / URI
 
 ## @WebServlet
 서블릿 어노테이션  
@@ -99,12 +95,25 @@ Http Method인 Get의 요청을 받을 수 있는 API를 만들어줌
 - 구버전 ) @RequestMapping(method = RequestMethod.GET)
 
 ```java
-@RestController
 public class HelloController {
+
     @GetMapping("/hello")
     public String hello() {
         return "hello";
     }
+}
+```
+
+<br/>
+<br/>
+
+## @RequestParam
+외부에서 API로 넘긴 파라미터를 가져옴
+
+```java
+@GetMapping("/hello/dto")
+public HelloResponseDto helloDto(@RequestParam("name") String name, @RequestParam("amount") int amount) {
+	return new HelloResponseDto(name, amount);
 }
 ```
 
@@ -124,10 +133,8 @@ public class HelloController {
 
 
 ---
----
+# 롬복 Lombok
 <br/>
-
-# 생성자
 
 ## @Getter @Setter
 - getter : 선언한 모든 필드의 get 메소드를 생성
@@ -171,18 +178,13 @@ public class HelloData {
 
 
 ---
----
-<br/>
-
 # Spring Boot Test
-
 <br/>
-
 
 ## @RunWith
 - 테스트를 진행할 때 JUnit에 내장된 실행자 외에 다른 실행자를 실행시킴
 - 스프링 부트 테스트와 JUnut 사이에 연결자 역할
-	- SpringSunner : 스프링 실행자
+	- SpringRunner : 스프링 실행자
 
 <br/>
 <br/>
@@ -231,5 +233,82 @@ public class HelloControllerTest {
 			.andExpect(status().isOk())	// HTTP Header의 Status 검증
 			.andExpect(content().string(hello)); // 리턴 값 검증
 	}
+}
+```
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+## assertj
+- CoreMathers와 달리 추가적으로 라이브러리가 필요하지 않음
+  - JUnit의 seertThat을 쓰게 되면 is()와 같이 CoreMatchers 라이브러리가 필요함
+- 자동완성이 좀 더 확실하게 지원됨
+  - IDE에서는 CoreMathcers와 같은 Matcher 라이브러리의 자동완성 지원이 약함
+- 메소드
+  - assertThat() : 검증하고 싶은 대상을 메소드 인자로 받음
+  - isEqualTo() : 동일 여부 확인
+
+<br/>
+
+```java
+@Test
+public void lobok_fn_test() {
+	// given
+	String name = "test";
+	int amount = 1000;
+
+	//when
+	HelloResponseDto dto = new HelloResponseDto(name, amount);
+
+	//then
+	assertThat(dto.getName()).isEqualTo(name);
+	assertThat(dto.getAmount()).isEqualTo(amount);
+}
+```
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+## param
+- API 테스트할 때 사용될 요청 파라미터를 설정
+  - get(url).param("파라미터명", 변수)
+- 값은 String만 허용
+  - 숫자/날짜 등의 데이터 등록 시 문자열로 변경 필요
+  - .param("파라미터명", String.valueOf(숫자형 변수))
+
+<br/>
+<br/>
+
+## jsonPath
+JSON 응답값을 필드별로 검증할 수 있는 메소드
+  - jsonPath("$.필드명", 검증메소드)
+
+<br/>
+<br/>
+
+## is
+동일 여부 확인
+  - org.hamcrest.Matchers.is
+
+<br/>
+
+```java
+@Test
+public void rtnHelloDto() throws Exception {
+    String name = "hello";
+    int amount = 1000;
+
+    mvc.perform(get("/hello/dto")
+                    .param("name", name)
+                    .param("amount", String.valueOf(amount))
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(name)))
+                .andExpect(jsonPath("$.amount", is(amount)));
 }
 ```
