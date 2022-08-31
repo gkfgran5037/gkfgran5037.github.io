@@ -21,6 +21,8 @@ sidebar-category:
     children:
       - title: "Spring MVC"
         url: "/springMVC"
+      - title: "Spring Boot"
+        url: "/springBoot
   - title: "Project"
     children:
       - title: "프로젝트1"
