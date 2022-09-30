@@ -57,7 +57,7 @@ int age = 2; // 변수 초기화 방법 2 ) 변수 선언과 동시에 초기화
 <br/>
 
 ```java
-// 클래스이름 변수이름 = new 생성자;
+// 클래스명 변수이름 = new 클래스명;
 Date today = new Date();
 ```
 <br/><br/><br/><br/><br/>
@@ -66,11 +66,13 @@ Date today = new Date();
 
 
 
+---
+<br/>
 
 ## 상수 (constant)
+- final 변수
 - 값을 한번만 저장할 수 있는 메모리 공간
 - 한 번 값을 저장하면 다른 값으로 변경할 수 없음
-- 변수 앞에 키워드 'final'을 붙여 사용
 - 선언과 동시에 반드시 초기화해야 함 (JDK 1.6부터 선언과 동시에 초기화 하지 않아도 허용)
 - 초기화 이후 상수의 값 변경 불가
 - 상수명 생성 규칙
@@ -84,10 +86,7 @@ Date today = new Date();
 ```java
 final int MAX_SCORE = 100; // final 타입 상수명 = 값;
 ```
-<br/><br/><br/><br/><br/>
-
-
-
+<br/><br/><br/>
 
 
 
