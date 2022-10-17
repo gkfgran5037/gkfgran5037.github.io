@@ -87,8 +87,16 @@ if (str3.isBlank()) {
 <br/>
 
 ### isEmpty()
-- 
 
+
+
+### repeat()
+- 문자 반복
+
+```java
+String str = "abc";
+str.repeat(3); // abcabcabc
+```
 
 
 
