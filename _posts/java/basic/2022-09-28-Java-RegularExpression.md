@@ -6,9 +6,10 @@ categories:
 
 <p style="color:gray; font-size:10px; text-align:center;"> 자세한 내용은 [코딩팩토리](https://coding-factory.tistory.com/529)에서 확인 바랍니다. </p>
 
-<br/>
-<br/>
-<br/>
+<br/><br/><br/>
+
+
+
 
 ## 정규표현식 (Regular Expression)
 - 특정한 규칙을 가진 문자열의 집합을 표현하기 위해 쓰이는 형식언어
@@ -17,15 +18,49 @@ categories:
   - Pattern클래스, Matcher클래스
 <br/>
 
-| 정규 표현식      | 설명  |
-|-------------|-----|
-| ^[0-9]*$    | 숫자  |
-| ^[a-zA-Z]*$ | 영문자 |
-| ^[가-힣]*$    | 한글  |
+| 정규 표현식        | 설명        |
+|---------------|-----------|
+| ^[0-9]*$      | 숫자        |
+| ^[+-]?[0-9]*$ | (부호) + 숫자 |
+| ^[a-zA-Z]*$   | 영문자       |
+| ^[가-힣]*$      | 한글        |
 
 <br/>
-<br/>
-<br/>
+
+```java
+public class CheckUtil {
+  private static final Pattern NUMBER_PATTERN = Pattern.compile("^[+-]?[0-9]*$");
+  private static final Pattern POSITIVE_PATTERN = Pattern.compile("^[0-9]*$");
+
+  public boolean checkNumber(String number) {
+    Matcher matcher = NUMBER_PATTERN.matcher(number);
+    return matcher.find();
+  }
+
+  public boolean checkPositive(String number) {
+    Matcher matcher = POSITIVE_PATTERN.matcher(number);
+    return matcher.find();
+  }
+
+  public List<Boolean> result() {
+    List<Boolean> list = new ArrayList<>();
+    list.add(checkNumber("3")); // true
+    list.add(checkNumber("+3")); // true
+    list.add(checkNumber("-3")); // true
+
+    list.add(checkPositive("3")); // true
+    list.add(checkPositive("-3")); // false
+    list.add(checkPositive("+3")); // false
+    return list;
+  }
+}
+```
+
+<br/><br/><br/>
+
+
+
+
 
 ## Pattern
 - 대상 문자열을 검증하는 기능
@@ -41,9 +76,7 @@ categories:
 | pattern()                   | 컴파일된 정규표현식을 String 형태로 반환합니다.           |
 | split(CharSequence input)   | 문자열을 주어진 인자값 CharSequence 패턴에 따라 분리합니다. |
 
-<br/>
-<br/>
-<br/>
+<br/><br/><br/>
 
 
 
@@ -66,9 +99,11 @@ categories:
 | group(int group) | 매칭된 부분중 group번 그룹핑 매칭부분 반환             |
 | groupCount()     | 패턴내 그룹핑한(괄호지정) 전체 갯수를 반환                 |
 
-<br/>
-<br/>
-<br/>
+<br/><br/><br/>
+
+
+
+
 
 | 표현식  | 설명                                                                                      |
 |------|-----------------------------------------------------------------------------------------|
@@ -91,9 +126,10 @@ categories:
 | \D   | 숫자를 제외한 모든 문자                                                                           |
 | (?i) | 앞 부분에 (?!)라는 옵션을 넣어주게 되면 대소문자는 구분하지 안함.                                               |
 
-<br/>
-<br/>
-<br/>
+<br/><br/><br/>
+
+
+
 
 ```java
 String text = "//;\n1;2;3";
