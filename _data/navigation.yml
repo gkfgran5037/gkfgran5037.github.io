@@ -23,6 +23,8 @@ sidebar-category:
         url: "/springMVC"
       - title: "Spring Boot"
         url: "/springBoot"
+      - title: "JPA"
+        url: "/jpa"
   - title: "JUnit"
     children:
       - title: "JUnit"
