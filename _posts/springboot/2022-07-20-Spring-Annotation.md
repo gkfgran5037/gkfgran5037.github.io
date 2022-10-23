@@ -4,7 +4,22 @@ categories:
   - Spring Boot
 ---
 
-## Annotation
+## 목차
+1. [Annotation](#annotation)
+2. [반환 형식](#반환-형식)
+3. [API](#api)
+4. [롬복 Lombok](#롬복-lombok)
+5. [JPA](#jpa)
+6. [Spring Boot Test](#spring-boot-test)
+7. [JUnit, assertj](#junit-assertj)
+
+<br/><br/><br/><br/><br/>
+
+
+
+
+
+# Annotation
 - 어노테이션 순서 : 주요 어노테이션을 클래스에 가깝게 둠
 
 <br/>
@@ -220,30 +235,63 @@ public class Posts {
 # JPA
 <br/>
 
-## Entitiy
+| 어노테이션           | 설명                                                        |
+|-----------------|-----------------------------------------------------------|
+| [@Entity](#entity)         | 테이블과 링크될 클래스임을 나타냄                                        |
+| [@Table](#table)          | 엔티티와 매핑되는 테이블을 지정                                         |
+| [@OrderBy](#orderBy)        | 정렬 수행                                                     |
+| [@Transient](#transient)      | 테이블의 컬럼에 매핑되지는 않지만 비즈니스 로직 수행 등의 이유로 유지해야 하는 상태(값)가 있을 경우 |
+| [@Column](#column)         | 테이블의 칼럼을 나타내며 굳이 선언하지 않더라도 해당 클래스의 필드는 모두 컬럼이 됨           |
+| [@Id](#id)             | 해당 테이블의 PK 필드                                             |
+| [@GeneratedValue](#generatedValue) | PK의 생성 규칙                                                 |
+
+<br/><br/><br/>
+
+
+
+## @Entity
 테이블과 링크될 클래스임을 나타냄
   - 기본값으로 클래스의 카멜케이스 이름을 언더스코어 네이밍(_)으로 테이블 이름을 매칭함
     - SalesManager.java -> sales_mansger table
-<br/>
-<br/>
+  - 기본 생성자 필수
+    - JPA가 엔티티 객체를 생성할 때, 기본 생성자를 사용
+  
 
-## Id
-해당 테이블의 PK 필드
-<br/>
-<br/>
+<br/><br/>
 
-## GeneratedValue
-PK의 생성 규칙
-<br/>
-<br/>
 
-## Column
+
+## @Table
+- 엔티티와 매핑되는 테이블을 지정
+- 엔티티명과 테이블명이 다를 경우 이름을 지정 필요
+
+<br/><br/>
+
+
+
+## @OrderBy
+- 정렬 수행
+
+<br/><br/>
+
+
+
+## @Transient
+- 테이블의 컬럼에 매핑되지는 않지만 비즈니스 로직 수행 등의 이유로 유지해야 하는 상태(값)가 있을 경우
+
+<br/><br/>
+
+
+
+
+## @Column
 테이블의 칼럼을 나타내며 굳이 선언하지 않더라도 해당 클래스의 필드는 모두 컬럼이 됨
   - 기본값 외에 추가로 변경이 필요한 옵션이 있으면 사용
+    - name : 컬럼명
     - length : 길이 변경 (문자열의 경우 varchar(255)가 기본값)
     - nullable : null 허용 여부
     - columnDefinition : 컬럼 타입 변경
-  
+
 <br/>
 
 ```java
@@ -270,7 +318,30 @@ public class Posts {
         this.author = author;
     }
 }
-```
+```  
+<br/><br/>
+
+
+
+## @Id
+해당 테이블의 PK 필드
+
+<br/><br/>
+
+
+
+## @GeneratedValue
+PK의 생성 규칙
+- 식별자를 직접 할당하지 않고 자동으로 생성
+- @GeneratedValue(strategy = GenerationType.방식)
+- 값을 생성하는 방식 
+  - Identity
+  - Sequence
+  - Table
+  - Custom
+  - Auto: 방언에 따라
+    - property name="hibernate.hbm2ddl.auto" value="create"
+    - create : drop 후 생성
 
 <br/>
 <br/>
@@ -409,6 +480,7 @@ public void rtnHelloDto() throws Exception {
 
 ---
 # JUnit, assertj
+<br/>
 
 ## assertj
 - CoreMathers와 달리 추가적으로 라이브러리가 필요하지 않음
