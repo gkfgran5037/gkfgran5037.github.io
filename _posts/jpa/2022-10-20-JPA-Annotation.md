@@ -12,12 +12,12 @@ categories:
 - [@OrderBy](#orderby)
 - [@Id](#id)
 - [@GeneratedValue](#generatedvalue)
-  - [GenerationType.IDENTITY](#generationtypeidentity)
-  - [GenerationType.SEQUENCE](#generationtypesequence)
+  - [1. GenerationType.IDENTITY](#1-generationtypeidentity)
+  - [2. GenerationType.SEQUENCE](#2-generationtypesequence)
   - [@SequenceGenerator](#sequencegenerator)
-  - [Table](#table-1)
+  - [3. Table](#3-table)
   - [@TableGenerator](#tablegenerator)
-  - [AUTO](#auto)
+  - [4. AUTO](#4-auto)
 - [@Column](#column)
 - [@Enumerated](#enumerated)
 - [@Temporal](#temporal)
@@ -35,6 +35,10 @@ categories:
   - [@IdClass](#idclass)
   - [@EmbeddedId](#embeddedid)
 - [비식별 관계](#비식별-관계)
+- [@MappedSuperclass](#mappedsuperclass)
+  - [@Inheritance](#inheritance)
+  - [@DiscriminatorColumn](#discriminatorcolumn)
+  - [@DiscriminatorValue](#discriminatorvalue)
 
 
 
@@ -158,7 +162,7 @@ PK의 생성 규칙
 <br/><br/>
 
 
-### GenerationType.IDENTITY
+### 1. GenerationType.IDENTITY
 - 기본 키 생성을 데이터베이스에 위임
 - 데이터베이스에 엔티티를 저장해서 식별자 값을 획득한 후 영속성 컨텍스트에 저장
 - Long, int 등 O, String X
@@ -179,7 +183,7 @@ private Long id;
 
 
 
-### GenerationType.SEQUENCE
+### 2. GenerationType.SEQUENCE
 ### @SequenceGenerator
 - 데이터베이스 시퀀스에서 식별자 값 획득 후 영속성 컨텍스트에 저장
 - em.persist()를 호출할 때 먼저 데이터베이스 시퀀스를 사용해서 식별자 조회
@@ -210,7 +214,7 @@ public class Member {
 
 
 
-### Table
+### 3. Table
 ### @TableGenerator
 - 키 생성 테이블 사용
 - 데이터베이스 시퀀스 생성용 테이블에서 식별자 값을 획득 후 영속성 컨텍스트에 저장
@@ -237,7 +241,7 @@ public class Board {
 
 
 
-### AUTO
+### 4. AUTO
 - 선택한 데이터베이스 방언에 따라 IDENTITY, SEQUENCE, TABLE 전략 중 하나를 자동 선택
 - 데이터베이스를 변경해도 코드를 수정할 필요가 없음
 - SEQUENCE, TABLEdl 전략이 선택될 시 시퀀스나 키 생성용 테이블을 미리 만들어 두어야 함
@@ -418,6 +422,12 @@ private int ranking;
 - @OneToMany(mappedBy = "외래키 필드명")
 - 매핑된 필드 명시
 - 일대다 단반향으로만 연관관계를 매핑하면 안됨
+- 속성
+  1. mappedBy = "필드명"
+  2. cascade = CascadeType.ALL
+     - 영속성 전이 기능
+     - 특정 엔티티를 영속 상태로 만들 때 연관된 엔티티도 함께 영속 상태로 만듦
+
 
 <br/><br/>
 
@@ -649,7 +659,7 @@ public class Product {
 
 <h5>[출처 - 자바 ORM 표준 JPA 프로그래밍 (김영한 저)]</h5>
 <br/><br/><br/><br/><br/>
-<h5>
+
 
 
 
@@ -722,7 +732,7 @@ public class MemberProductId implements Serializable {
 
 <h5>[출처 - 자바 ORM 표준 JPA 프로그래밍 (김영한 저)]</h5>
 <br/><br/><br/><br/><br/>
-<h5>
+
 
 
 
@@ -739,6 +749,13 @@ public class MemberProductId implements Serializable {
   - 영구히 쓸 수 있음
   - 비즈니스에 의존하지 않음
   - ORM 매핑 시에 복합 키를 만들지 않아도 되므로 간단히 매핑 가능
+- 분류
+  1. 선택적 비식별 관계
+      - 외래 키에 null 허용
+      - 외부 조인(Outer Join) 사용
+  2. 필수적 비식별 관계
+      - 외래 키에 null 허용하지 않음
+      - 내부 조인(Inner Join) 사용
 
 
 ```java
@@ -802,13 +819,94 @@ public class Order { // 비식별 관계
 
 <h5>[출처 - 자바 ORM 표준 JPA 프로그래밍 (김영한 저)]</h5>
 <br/><br/><br/><br/><br/>
-<h5>
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+---
+<br/>
+
+## @MappedSuperclass
+- 각각의 구현클래스를 개별 테이블에 매핑하는 전략
+- 여러 엔티티에서 공통으로 사용하는 매핑 정보만 상속받고 싶을 떄 사용
+- 다수의 엔티티가 공통 속성을 공유할 수 있음
+- mapped superclass가 지정된 클래스는 엔티티가 아니므로 테이블에 매핑되는 것은 아님
+- 주로 createdBy, createdOn과 같이 테이블에서 공통적으로 사용되는 반복되는 필드를 각
+테이블에 끼워 넣을 때 사용
+
+<br/>
+
+```java
+@MappedSuperclass
+public abstract class Publication {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "PUBLICATION_ID", updatable = false, nullable = false)
+    protected Long id;
+
+    @Column
+    protected String title;
+
+    @Column(name = "version")
+    private int version;
+
+    // getter setter
+}
+```
+
+<br/>
+
+```java
+@Entity
+public class Book2 extends Publication {
+
+    @Column
+    private int pages;
+}
+```
+<br/><br/><br/><br/><br/>
+
+
+
+
+
+
+### @Inheritance
+- 상속 매핑
+- 부모 클래스에 사용
+- 전략
+  1. InheritanceType.JOINED
+     - 조인 전략
+     - 테이블 정규화됨
+     - 외래 키 참조 무결성 제약조건 활용 가능
+     - 조회할 떄 조인이 많이 사용되므로 성능 저하될 수 있음
+  2. InheritanceType.SINGLE_TABLE
+     - 단일 테이블 전략
+     - 테이블 하나에 모든 것을 통합하므로 구분 컬럼 필수
+     - 조인이 필요 없으므로 일반적으로 조회 성능이 빠름
+     - 자식 엔티티가 매핑한 컬럼 모두 null 허용해야 함
+ <br/><br/>
+
+
+
+### @DiscriminatorColumn
+- 부모 클래스에 구분 컬럼을 지정 (자식 테이블 구분)
+
+<br/><br/>
+
+### @DiscriminatorValue
+- 엔티티를 저장할 때 구분 컬럼에 입력할 값 지정
+- DiscriminatorColumn에 표시될 값
 
 
 [참고 강의 : 스프링과 JPA를 이용한 웹개발](http://www.kocw.net/home/cview.do?cid=5e6aec4a9ae2dd45)   
