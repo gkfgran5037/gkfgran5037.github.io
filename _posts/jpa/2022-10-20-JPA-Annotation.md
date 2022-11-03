@@ -35,7 +35,6 @@ categories:
   - [@IdClass](#idclass)
   - [@EmbeddedId](#embeddedid)
 - [비식별 관계](#비식별-관계)
-    - [ManyToMany -> OneToMany, ManyToOne 비식별 관계 예시](#manytomany---onetomany-manytoone-비식별-관계-예시)
 
 
 
@@ -742,10 +741,6 @@ public class MemberProductId implements Serializable {
   - ORM 매핑 시에 복합 키를 만들지 않아도 되므로 간단히 매핑 가능
 
 
-
-
-#### ManyToMany -> OneToMany, ManyToOne 비식별 관계 예시
-
 ```java
 @Entity
 @Table(name = "MEMBER")
@@ -805,37 +800,6 @@ public class Order { // 비식별 관계
 }
 ```
 
-<br/>
-
-```java
-public static void testSave(EntityManager em) {
-    Member member1 = new Member("member1", "회원1");
-    em.persist(member1);
-
-    Product productA = new Product();
-    productA.setId("productA");
-    productA.setName("상품1");
-    em.persist(productA);
-
-    Order order = new Order();
-    order.setMember(member1);
-    order.setProduct(productA);
-    order.setOrderAmount(2);
-    em.persist(order);
-}
-
-public static void find(EntityManager em) {
-    Long orderId = 1L;
-    Order order = em.find(Order.class, orderId);
-
-    Member member = order.getMember();
-    Product product = order.getProduct();
-
-    System.out.println("product.getName() = " + product.getName());
-    System.out.println("member.getUserName() = " + member.getUserName());
-    System.out.println("orderAmount = " + order.getOrderAmount());
-}
-```
 <h5>[출처 - 자바 ORM 표준 JPA 프로그래밍 (김영한 저)]</h5>
 <br/><br/><br/><br/><br/>
 <h5>
