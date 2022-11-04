@@ -99,15 +99,10 @@ List<Person> persons2 = query.selectFrom(person)
         .fetch();
 ```
 
-
-
-
-
 <br/><br/><br/><br/><br/>
 <h5>
 
 [참고 강의 : 스프링과 JPA를 이용한 웹개발](http://www.kocw.net/home/cview.do?cid=5e6aec4a9ae2dd45)   
 [참고 서적 : 김영한 - 자바 ORM 표준 JPA 프로그래밍](https://product.kyobobook.co.kr/detail/S000000935744)
-[querydsl 레퍼런스](http://querydsl.com/static/querydsl/3.7.2/reference/ko-KR/html/index.html)
 
 </h5>
