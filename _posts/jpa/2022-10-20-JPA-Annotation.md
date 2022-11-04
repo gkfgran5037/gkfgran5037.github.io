@@ -1,7 +1,7 @@
 ---
 title:  "JPA Annotation"
 categories:
-  - Spring Boot
+  - JPA
 ---
 
 ## 목차
@@ -427,6 +427,9 @@ private int ranking;
   2. cascade = CascadeType.ALL
      - 영속성 전이 기능
      - 특정 엔티티를 영속 상태로 만들 때 연관된 엔티티도 함께 영속 상태로 만듦
+  3. orphanRemoval = true
+     - Many-To-One 관계에서 child는 부모가 존재하지 않을 경우 부모 엔티티를 삭제하면 자식 엔티팉도 자동 삭제
+     - ex) null로 변경 시 변경 감지에서 객체 관점에서 연관된 엔티티가 더 이상 없다고 생각하고 기존의 연관 Entity 삭제
 
 
 <br/><br/>
@@ -908,6 +911,9 @@ public class Book2 extends Publication {
 - 엔티티를 저장할 때 구분 컬럼에 입력할 값 지정
 - DiscriminatorColumn에 표시될 값
 
+
+
+<h5>
 
 [참고 강의 : 스프링과 JPA를 이용한 웹개발](http://www.kocw.net/home/cview.do?cid=5e6aec4a9ae2dd45)   
 [참고 서적 : 김영한 - 자바 ORM 표준 JPA 프로그래밍](https://product.kyobobook.co.kr/detail/S000000935744)
