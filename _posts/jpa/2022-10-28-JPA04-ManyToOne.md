@@ -4,6 +4,32 @@ categories:
   - JPA
 ---
 
+## 목차
+
+  - [연관관계](#연관관계)
+  - [@JoinColumn](#joincolumn)
+    - [연관관계의 주인](#연관관계의-주인)
+  - [Many-TO-One (One-To-Many)](#many-to-one-one-to-many)
+    - [@OneToMany](#onetomany)
+    - [@ManyToOne](#manytoone)
+  - [One-To-One](#one-to-one)
+  - [Many-To-Many](#many-to-many)
+  - [식별 관계](#식별-관계)
+    - [복합 기본 키](#복합-기본-키)
+    - [@IdClass](#idclass)
+  - [비식별 관계](#비식별-관계)
+      - [ManyToMany -> OneToMany, ManyToOne 식별 관계 예시](#manytomany---onetomany-manytoone-식별-관계-예시)
+      - [ManyToMany -> OneToMany, ManyToOne 비식별 관계 예시](#manytomany---onetomany-manytoone-비식별-관계-예시)
+
+<!-- /TOC -->
+<br/><br/><br/><br/><br/>
+
+
+
+
+---
+<br/>
+
 # 연관관계
 - 테이블은 외래키 하나로 테이블 간 연관관계를 설정
 - 연관관계의 ownership 결정 필요

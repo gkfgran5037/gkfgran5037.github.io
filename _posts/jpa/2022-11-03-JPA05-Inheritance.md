@@ -4,7 +4,25 @@ categories:
   - Spring Boot
 ---
 
+## 목차
 
+- [상속전략](#상속전략)
+  - [1. @MappedSuperclass](#1-mappedsuperclass)
+  - [2. Table per Class](#2-table-per-class)
+  - [3. Single Table](#3-single-table)
+    - [@Inheritance](#inheritance)
+    - [@DiscriminatorColumn](#discriminatorcolumn)
+    - [@DiscriminatorValue](#discriminatorvalue)
+  - [4. 조인 전략](#4-조인-전략)
+  - [Cascade](#cascade)
+
+<br/><br/><br/><br/><br/>
+
+
+
+
+---
+<br/>
 
 # 상속전략
 
