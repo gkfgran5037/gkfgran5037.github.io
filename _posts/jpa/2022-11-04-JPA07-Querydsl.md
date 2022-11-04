@@ -7,6 +7,7 @@ categories:
 ## Querydsl
 - 동적쿼리 작성을 용이하게 함
 - 쿼리문을 작성하기 위해 Q 타입 클래스를 사용
+- JPQL을 만들어주는 빌더 역할
 - 구분
   1. JPAQuery
      - EntityManager를 통해서 질의 처리
