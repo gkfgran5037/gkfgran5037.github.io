@@ -1,5 +1,5 @@
 ---
-title:  "JPA 영속성"
+title:  "JPA 02. 영속성"
 categories:
   - JPA
 --- 

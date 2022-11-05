@@ -1,5 +1,5 @@
 ---
-title:  "JPA 연관관계"
+title:  "JPA 04. 연관관계"
 categories:
   - JPA
 ---

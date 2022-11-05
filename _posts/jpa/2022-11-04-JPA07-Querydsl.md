@@ -1,5 +1,5 @@
 ---
-title:  "JPA Querydsl"
+title:  "JPA 07. Querydsl"
 categories:
   - JPA
 ---

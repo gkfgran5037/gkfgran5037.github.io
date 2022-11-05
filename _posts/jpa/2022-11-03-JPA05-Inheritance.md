@@ -1,5 +1,5 @@
 ---
-title:  "JPA 상속관계, Cascade"
+title:  "JPA 05. 상속관계, Cascade"
 categories:
   - Spring Boot
 ---
