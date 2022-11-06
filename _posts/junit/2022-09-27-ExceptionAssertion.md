@@ -1,7 +1,7 @@
 ---
 title:  "AssertJ Exception Assertions"
 categories:
-  - JUnit
+  - junit
 ---
 
 ## Exception Assertions

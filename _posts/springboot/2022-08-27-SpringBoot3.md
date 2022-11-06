@@ -1,7 +1,7 @@
 ---
 title:  "SpringBoot 03 테스트 코드 JUnit vs assertJ"
 categories:
-  - Spring Boot
+  - springBoot
 ---
 
 ## JUnit

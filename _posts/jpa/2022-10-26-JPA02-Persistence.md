@@ -1,7 +1,7 @@
 ---
 title:  "JPA 02. 영속성"
 categories:
-  - JPA
+  - jpa
 --- 
 
 ## 목차
@@ -17,7 +17,6 @@ categories:
   - [2. 엔티티의 동일성 보장](#2-엔티티의-동일성-보장)
   - [3. 트랜잭션을 지원하는 쓰기 지연 (transactional write-behind)](#3-트랜잭션을-지원하는-쓰기-지연-transactional-write-behind)
   - [4. 변경 감지 (dirty checking)](#4-변경-감지-dirty-checking)
-<br/><br/><br/><br/><br/>
 
 
 ---

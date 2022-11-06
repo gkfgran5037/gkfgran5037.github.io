@@ -1,7 +1,7 @@
 ---
 title:  "SpringBoot Annotation"
 categories:
-  - Spring Boot
+  - springBoot
 ---
 
 ## 목차
@@ -9,28 +9,22 @@ categories:
 - [Annotation](#annotation)
   - [@ServletComponentScan](#servletcomponentscan)
   - [@SpringBootApplication](#springbootapplication)
-- [반환 형식](#반환-형식)
+- [Web Application](#web-application)
+  - [@Repository](#repository)
+  - [@PersistenceContext](#persistencecontext)
+  - [@PersistenceUnit](#persistenceunit)
+  - [@Service](#service)
+  - [@Transactional](#transactional)
+  - [@Autowired](#autowired)
+  - [@RequiredArgsConstructor](#requiredargsconstructor)
+  - [@Controller](#controller)
   - [@RestController](#restcontroller)
+  - [@JsonManagedReference](#jsonmanagedreference)
+  - [@JsonBackReference](#jsonbackreference)
 - [API](#api)
   - [@WebServlet](#webservlet)
   - [@GetMapping](#getmapping)
   - [@RequestParam](#requestparam)
-- [롬복 Lombok](#롬복-lombok)
-  - [@Getter @Setter](#getter-setter)
-  - [@RequiredArgsConstructor](#requiredargsconstructor)
-  - [@NoArgsConstructor](#noargsconstructor)
-  - [Builder](#builder)
-- [Spring Boot Test](#spring-boot-test)
-  - [@RunWith](#runwith)
-  - [@WebMvcTest](#webmvctest)
-  - [@Autiwired](#autiwired)
-  - [MockMvc](#mockmvc)
-  - [param](#param)
-  - [jsonPath](#jsonpath)
-  - [is](#is)
-- [JUnit, assertj](#junit-assertj)
-  - [assertj](#assertj)
-  - [@After](#after)
 
 
 
@@ -75,6 +69,26 @@ public class ServletApplication {
 ```
 
 <br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -85,8 +99,114 @@ public class ServletApplication {
 
 
 ---
-# 반환 형식
 <br/>
+
+# Web Application
+<br/>
+
+## @Repository
+- 엔티티 메니저를 사용해서 엔티티를 저장하고 조회
+- @Repository이 붙어 있으면 component-scan에 의해 스프링 빈으로 자동 등록됨
+- JPA 전용 예외가 발생하면 스프링이 추상화한 예외로 변환해줌
+  - ex) NoResultException -> EmptyResultDataAccessException
+  - 서비스 계층은 JPA에 의존적인 예외를 처리하지 않아도 됨
+
+<br/>
+
+```java
+@Repository
+public class MemberRepository {
+
+    @PersistenceContext
+    EntityManager em;
+    // ~
+}
+```
+<br/><br/>
+
+
+
+## @PersistenceContext
+- 엔티티 매니저 주입
+- 컨테이너가 관리하는 엔티티 매니저를 주입
+- 컨테이너가 제공하는 트랜잭션 기능과 연계해서 컨테이너의 다양한 기능들을 사용 가능
+  - 순수 자바 환경 ) 엔티티 메니저 팩토리에서 엔티티 매니저 직접 생성해서 사용
+  - 스프링, J2EE 환경 ) 컨테이너가 엔티티 매니저를 관리하고 제공
+<br/><br/>
+
+
+
+
+## @PersistenceUnit
+- 엔티티 매니저 팩토리를 주입 받음
+
+<br/>
+
+```java
+@PersistenceUnit
+EntityManagerFactory emf; 
+```
+
+
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+
+
+
+
+
+
+
+
+
+
+---
+<br/>
+
+## @Service
+- 비즈니스 로직이 있고 트랜잭션을 시작함
+- 데이터 접근 계층인 리포지토리를 호출
+- @Service이 붙어 있으면 component-scan에 의해 스프링 빈으로 등록됨
+
+<br/>
+
+```java
+@Service
+@Transactional
+public class MemberService {
+    @Autowired
+    MemberRepository memberRepository;
+    // ~
+}
+```
+
+<br/><br/>
+
+
+
+## @Transactional
+- 외부에서 이 클래스의 메소드를 호출할 때 트랜잭션을 시작하고 메소드를 종료할 때 트랜잭션을 커밋
+- 예외 발생 시 트랜잭션 롤백
+  - RuntimeException과 그 자식들인 Unchecked 예외만 롤백함
+  - 만약 체크 예외가 발생해도 롤백하고 싶다면 rollbackOn = Exception.class처럼 롤백할 예외를 지정해야 함
+- 스프링프레임워크는 @Transactional이 붙어 있는 클래스나 메소드에 트랜잭션을 적용함
+- 테스트에서 사용 시 각각의 테스트를 실행할 떄마다 트랜잭션을 시작하고 테스트가 끝나면 트랜잭션을 강제로 롤백함
+<br/><br/>
+
+
+
+## @Autowired
+- @Autowired이 붙어 있으면 스프링 컨테이너가 적절한 스프링 빈을 주입해줌
+- 지원 : 스프링 프레임워크 (타 프레임워크 호환 불가 )
+- 빈 검색 방식 : 타입
+- 특정 빈을 찾지 못하면 예외를 던짐 (단, required 속성으로 처리 가능)
+- Autowired의 위치에 따른 주입 방법 구분 (생성자, 수정, 필드 주입)
+
+
+## @RequiredArgsConstructor
+
+
+## @Controller
 
 ## @RestController
 컨트롤러를 JSON을 반환하는 컨트롤러로 만들어 줌
@@ -98,9 +218,27 @@ public class HelloController {
 }
 ```
 
+// ObjectMapper
+
+
+## @JsonManagedReference
+
+## @JsonBackReference
+
 <br/><br/><br/><br/><br/>
 <br/><br/><br/><br/><br/>
 <br/><br/><br/><br/><br/>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -180,255 +318,6 @@ public HelloResponseDto helloDto(@RequestParam("name") String name, @RequestPara
 
 
 
----
-# 롬복 Lombok
-<br/>
-
-## @Getter @Setter
-- getter : 선언한 모든 필드의 get 메소드를 생성
-- setter : 선언한 모든 필드의 set 메소드를 생성
-  - JPA Entity 클래스에서는 Setter 메소드를 만들지 않고 목적과 의도를 나타낼 수 있는 메소드를 추가해야 함
-
-<br/>
-<br/>
-
-## @RequiredArgsConstructor
-선언된 모든 final 필드가 포함된 생성자를 생성
-
-<br/>
-
-```java
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter // 선언한 모든 필드의 get 메소드를 생성
-@Setter // 선언한 모든 필드의 set 메소드를 생성
-@RequiredArgsConstructor // 선언된 모든 final 필드가 포함된 생성자를 생성
-public class HelloData {
-	private String username;
-	private int age;
-}
-```
-
-<br/>
-<br/>
-
-## @NoArgsConstructor
-기본 생성자 자동 추가
-  - public Posts() {} 와 같은 효과
-
-## Builder
-- 해당 클래스의 빌더 패턴 클래스를 생성
-- 해당 클래스 상단에 선언 시 생성자에 포함된 필드만 빌더에 포함
-
-```java
-@Getter
-@NoArgsConstructor // 기본 생성자 자동 추가
-public class Posts {
-  private String title;
-  private String content;
-  
-  @Builder // 해당 클래스의 빌더 패턴 클래스를 생성
-  public Posts(String title, String content) {
-      this.title = title;
-      this.content = content;
-  }
-}
-```
-
-<br/><br/><br/><br/><br/>
-<br/><br/><br/><br/><br/>
-<br/><br/><br/><br/><br/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-# Spring Boot Test
-<br/>
-
-## @RunWith
-- 테스트를 진행할 때 JUnit에 내장된 실행자 외에 다른 실행자를 실행시킴
-- 스프링 부트 테스트와 JUnit 사이에 연결자 역할
-	- SpringRunner : 스프링 실행자
-
-<br/>
-<br/>
-
-## @WebMvcTest
-Web(Spring MVC)에 집중할 수 있는 어노테이션
-  - controllers : @Controller, @ControllerAdvice 등 사용 가능
-
-<br/>
-<br/>
-
-## @Autiwired
-스프링이 관리하는 Bean을 주입받음
-
-<br/>
-<br/>
-
-## MockMvc
-HTTP GET, POST 등 웹 API를 테스트
-  - perform : uri로 API 요청
-  - andExcept : perform의 결과 검증
-
-<br/>
-
-```java
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.*;
-
-
-@RunWith(SpringRunner.class) // 스프링 부트 테스트와 JUnit 사이에 연결자 역할
-@WebMvcTest(controllers = HelloController.class) // Web에 집중할 수 있는 어노테이션
-public class HelloControllerTest {
-	@Autowired // 빈 주입 받음
-    private MockMvc mvc; // HTTP GET, POST 등 웹 API를 테스트
-
-	@Test
-    public void hello_rtn() throws Exception {
-		String hello = "hello";
-
-		mvc.perform(get("/hello"))	// uri로 HTTP GET 요청
-			.andExpect(status().isOk())	// HTTP Header의 Status 검증
-			.andExpect(content().string(hello)); // 리턴 값 검증
-	}
-}
-```
-
-<br/><br/><br/><br/><br/>
-
-
-
-
-
-
-
-## param
-- API 테스트할 때 사용될 요청 파라미터를 설정
-  - get(url).param("파라미터명", 변수)
-- 값은 String만 허용
-  - 숫자/날짜 등의 데이터 등록 시 문자열로 변경 필요
-  - .param("파라미터명", String.valueOf(숫자형 변수))
-
-<br/>
-<br/>
-
-## jsonPath
-JSON 응답값을 필드별로 검증할 수 있는 메소드
-  - jsonPath("$.필드명", 검증메소드)
-
-<br/>
-<br/>
-
-## is
-동일 여부 확인
-  - org.hamcrest.Matchers.is
-
-<br/>
-
-```java
-@Test
-public void rtnHelloDto() throws Exception {
-    String name = "hello";
-    int amount = 1000;
-
-    mvc.perform(get("/hello/dto")
-                    .param("name", name)
-                    .param("amount", String.valueOf(amount))
-                ).andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is(name)))
-                .andExpect(jsonPath("$.amount", is(amount)));
-}
-```
-<br/><br/><br/><br/><br/>
-<br/><br/><br/><br/><br/>
-<br/><br/><br/><br/><br/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-# JUnit, assertj
-<br/>
-
-## assertj
-- CoreMathers와 달리 추가적으로 라이브러리가 필요하지 않음
-  - JUnit의 seertThat을 쓰게 되면 is()와 같이 CoreMatchers 라이브러리가 필요함
-- 자동완성이 좀 더 확실하게 지원됨
-  - IDE에서는 CoreMathcers와 같은 Matcher 라이브러리의 자동완성 지원이 약함
-- 메소드
-  - assertThat() : 검증하고 싶은 대상을 메소드 인자로 받음
-  - isEqualTo() : 동일 여부 확인
-
-<br/>
-
-```java
-@Test
-public void lobok_fn_test() {
-	// given
-	String name = "test";
-	int amount = 1000;
-
-	//when
-	HelloResponseDto dto = new HelloResponseDto(name, amount);
-
-	//then
-	assertThat(dto.getName()).isEqualTo(name);
-	assertThat(dto.getAmount()).isEqualTo(amount);
-}
-```
-
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-
-## @After
-- JUnit에서 단위 테스트가 끝날 떄마다 수행되는 메소드를 지정
-- 보통은 배포 전 전체 테스트를 수행할 떄 테스트간 데이터 침범을 막기 위해 사용
-- 여러 테스트가 동시에 수행되면 테스트용 데이터베이스인 H2에 데이터가 그대로 남아 있어 다음 테스트 실행 시 테스트가 실패할 수 있음
-<br/>
-
-```java
-@After // 단위 테스트가 끝날 떄마다 수행되는 메소드 지정
-public void cleanup() {
-    postsRepository.deleteAll();
-}
-```
 
 
 <br/><br/><br/><br/><br/>

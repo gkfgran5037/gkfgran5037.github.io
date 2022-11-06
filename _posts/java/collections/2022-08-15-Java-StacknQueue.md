@@ -172,6 +172,7 @@ categories:
 - 저장 방법
   - 저장 공간 : 배열
   - 각 요소 저장 형식 : heap
+- 대표문제 : 최대 수입 스케쥴
 
 <br/>
 <img src="https://user-images.githubusercontent.com/42172353/184631103-fded9f8c-0f8b-4028-9779-9715e2aac369.png" width="70%"/>
@@ -181,20 +182,22 @@ categories:
 
 ```java
 Queue<Integer> q = new PriorityQueue<>();
-		q.offer(new Integer(2)); 
-		q.offer(4); // 오토박싱
-		q.offer(5);
-		q.offer(1);
-		q.offer(3);
-		
-		Object obj = null;
-		
-		// 우선순위 출력 - 12345
-		// poll() : 없을 시 null 반환
-		while ((obj = q.poll()) != null) {
-			System.out.print(obj);
-		}
+q.offer(new Integer(2)); 
+q.offer(4); // 오토박싱
+q.offer(5);
+q.offer(1);
+q.offer(3);
+
+Object obj = null;
+
+// 우선순위 출력 - 12345
+// poll() : 없을 시 null 반환
+while ((obj = q.poll()) != null) {
+  System.out.print(obj);
+}
 ```
+
+[우선순위 큐 활용 문제 - 최대수입스케쥴]()
 
 ##### [참고 강의 : 남궁성의 정석코딩](https://www.youtube.com/watch?v=ktvhRSRohR4&list=PLW2UjW795-f6xWA2_MUhEVgPauhGl3xIp&index=123)
 ##### [참고 서적 : 자바로 배우는 쉬운 자료구조](http://www.kyobobook.co.kr/product/detailViewKor.laf?mallGb=KOR&ejkGb=KOR&barcode=9788998756420)

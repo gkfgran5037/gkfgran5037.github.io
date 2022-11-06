@@ -1,7 +1,7 @@
 ---
 title:  "JPA 07. Querydsl"
 categories:
-  - JPA
+  - jpa
 ---
 
 ## 목차

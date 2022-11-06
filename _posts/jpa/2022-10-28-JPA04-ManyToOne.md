@@ -1,12 +1,12 @@
 ---
 title:  "JPA 04. 연관관계"
 categories:
-  - JPA
+  - jpa
 ---
 
 ## 목차
 
-  - [연관관계](#연관관계)
+- [연관관계](#연관관계)
   - [@JoinColumn](#joincolumn)
     - [연관관계의 주인](#연관관계의-주인)
   - [Many-TO-One (One-To-Many)](#many-to-one-one-to-many)
@@ -18,8 +18,8 @@ categories:
     - [복합 기본 키](#복합-기본-키)
     - [@IdClass](#idclass)
   - [비식별 관계](#비식별-관계)
-      - [ManyToMany -> OneToMany, ManyToOne 식별 관계 예시](#manytomany---onetomany-manytoone-식별-관계-예시)
-      - [ManyToMany -> OneToMany, ManyToOne 비식별 관계 예시](#manytomany---onetomany-manytoone-비식별-관계-예시)
+      - [ManyToMany -\> OneToMany, ManyToOne 식별 관계 예시](#manytomany---onetomany-manytoone-식별-관계-예시)
+      - [ManyToMany -\> OneToMany, ManyToOne 비식별 관계 예시](#manytomany---onetomany-manytoone-비식별-관계-예시)
 
 <!-- /TOC -->
 <br/><br/><br/><br/><br/>

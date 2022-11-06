@@ -1,7 +1,7 @@
 ---
 title:  "JPA 05. 상속관계, Cascade"
 categories:
-  - Spring Boot
+  - jpa
 ---
 
 ## 목차
@@ -9,8 +9,8 @@ categories:
 - [상속전략](#상속전략)
   - [1. @MappedSuperclass](#1-mappedsuperclass)
   - [2. Table per Class](#2-table-per-class)
+  - [3~4. @Inheritance](#34-inheritance)
   - [3. Single Table](#3-single-table)
-    - [@Inheritance](#inheritance)
     - [@DiscriminatorColumn](#discriminatorcolumn)
     - [@DiscriminatorValue](#discriminatorvalue)
   - [4. 조인 전략](#4-조인-전략)
@@ -64,10 +64,11 @@ public class Book2 extends Publication { // 상속 받음
     private int pages;
 }
 ```
+<h5>[출처 - 자바 ORM 표준 JPA 프로그래밍 (김영한 저)]</h5>
+<br/>
+
 결과  
 <img width = "80%" src = "https://user-images.githubusercontent.com/42172353/199655535-1d4668fa-4f3e-43c3-aaae-d9163c084e9c.png" />
-
-<h5>[출처 - 자바 ORM 표준 JPA 프로그래밍 (김영한 저)]</h5>
 <br/><br/><br/>
 
 
@@ -85,17 +86,7 @@ public class Book2 extends Publication { // 상속 받음
 
 
 
-
-
-## 3. Single Table
-- 하나의 테이블에 저장하는 방식 (통합 테이블로 변환)
-- 하나의 테이블만 조회하면 되므로 성능 측면에서 가장 유리
-- Null허용 필드가 많아지는 단점이 존재
-- 데이터 무결성이 꺠질 위험성이 높음
-
-<br/><br/>
-
-### @Inheritance
+## 3~4. @Inheritance
 - 상속 매핑
 - 부모 클래스에 사용
 - 전략
@@ -109,7 +100,18 @@ public class Book2 extends Publication { // 상속 받음
      - 테이블 하나에 모든 것을 통합하므로 구분 컬럼 필수
      - 조인이 필요 없으므로 일반적으로 조회 성능이 빠름
      - 자식 엔티티가 매핑한 컬럼 모두 null 허용해야 함
- <br/><br/>
+<br/><br/><br/>
+
+
+
+
+## 3. Single Table
+- InheritanceType.SINGLE_TABLE
+- 하나의 테이블에 저장하는 방식 (통합 테이블로 변환)
+- 하나의 테이블만 조회하면 되므로 성능 측면에서 가장 유리
+- Null허용 필드가 많아지는 단점이 존재
+- 데이터 무결성이 꺠질 위험성이 높음
+<br/><br/>
 
 
 
@@ -156,10 +158,11 @@ public class Book extends Publication {
     //getter setter
 }
 ```
-
-결과  
-<img width = "80%" src = "https://user-images.githubusercontent.com/42172353/199654917-9919c8df-acb6-42b7-b5b6-71f0f14b0c7d.png"/>
 <h5>[출처 - 자바 ORM 표준 JPA 프로그래밍 (김영한 저)]</h5>
+<br/>
+
+결과   
+<img width = "80%" src = "https://user-images.githubusercontent.com/42172353/199654917-9919c8df-acb6-42b7-b5b6-71f0f14b0c7d.png"/>
 <br/><br/><br/>
 
 
@@ -168,6 +171,7 @@ public class Book extends Publication {
 
 
 ## 4. 조인 전략
+- InheritanceType.JOINED
 - 각각을 모두 테이블로 만들고 조회할 때 조인 사용
 - abstract superclass도 DB 테이블로 매핑(모든 공유 속성을 포함하는 테이블)
 
@@ -201,15 +205,16 @@ public abstract class Publication {
 public class Book extends Publication {
 
     @Column
-    private int pages; // nullable
+    private int pages;
     
     //getter setter
 }
 ```
+<h5>[출처 - 자바 ORM 표준 JPA 프로그래밍 (김영한 저)]</h5>
+<br/>
 
 결과  
 <img width = "80%" src = "https://user-images.githubusercontent.com/42172353/199661217-622a8dfa-c371-4fbc-9a7c-a7de33c4faa5.png"/>
-<h5>[출처 - 자바 ORM 표준 JPA 프로그래밍 (김영한 저)]</h5>
 <br/><br/><br/><br/><br/>
 <br/><br/><br/><br/><br/>
 

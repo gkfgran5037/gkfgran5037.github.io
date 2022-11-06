@@ -1,44 +1,55 @@
 ---
-title:  "JPA Annotation"
+title:  "JPA 00. JPA Annotation"
 categories:
-  - JPA
+  - jpa
 ---
 
 ## 목차
 
-- [목차](#목차)
-- [@Entity](#entity)
-- [@Table](#table)
-- [@OrderBy](#orderby)
-- [@Id](#id)
-- [@GeneratedValue](#generatedvalue)
-  - [1. GenerationType.IDENTITY](#1-generationtypeidentity)
-  - [2. GenerationType.SEQUENCE](#2-generationtypesequence)
-  - [@SequenceGenerator](#sequencegenerator)
-  - [3. Table](#3-table)
-  - [@TableGenerator](#tablegenerator)
-  - [4. AUTO](#4-auto)
-- [@Column](#column)
-- [@Enumerated](#enumerated)
-- [@Temporal](#temporal)
-- [@Lob](#lob)
-- [@Transient](#transient)
-- [@Access](#access)
-- [@JoinColumn](#joincolumn)
-- [@OneToMany](#onetomany)
-- [@ManyToOne](#manytoone)
-- [@OneToOne](#onetoone)
-- [@ManyToMany](#manytomany)
-  - [@JoinTable](#jointable)
-- [식별 관계](#식별-관계)
-  - [복합 기본 키](#복합-기본-키)
-  - [@IdClass](#idclass)
-  - [@EmbeddedId](#embeddedid)
-- [비식별 관계](#비식별-관계)
-- [@MappedSuperclass](#mappedsuperclass)
-  - [@Inheritance](#inheritance)
-  - [@DiscriminatorColumn](#discriminatorcolumn)
-  - [@DiscriminatorValue](#discriminatorvalue)
+- [](#)
+  - [@Entity](#entity)
+  - [@Table](#table)
+  - [@OrderBy](#orderby)
+  - [@Id](#id)
+  - [@GeneratedValue](#generatedvalue)
+    - [1. GenerationType.IDENTITY](#1-generationtypeidentity)
+    - [2. GenerationType.SEQUENCE](#2-generationtypesequence)
+    - [@SequenceGenerator](#sequencegenerator)
+    - [3. Table](#3-table)
+    - [@TableGenerator](#tablegenerator)
+    - [4. AUTO](#4-auto)
+  - [@Column](#column)
+  - [@Enumerated](#enumerated)
+  - [@Temporal](#temporal)
+  - [@Lob](#lob)
+  - [Embedded Type](#embedded-type)
+    - [@Embedded](#embedded)
+    - [@Embeddable](#embeddable)
+  - [@Transient](#transient)
+  - [@Access](#access)
+  - [@JoinColumn](#joincolumn)
+- [연관 관계](#연관-관계)
+  - [@OneToMany](#onetomany)
+  - [@ManyToOne](#manytoone)
+  - [@OneToOne](#onetoone)
+  - [@ManyToMany](#manytomany)
+    - [@JoinTable](#jointable)
+  - [식별 관계](#식별-관계)
+    - [복합 기본 키](#복합-기본-키)
+    - [@IdClass](#idclass)
+    - [@EmbeddedId](#embeddedid)
+  - [비식별 관계](#비식별-관계)
+  - [@MappedSuperclass](#mappedsuperclass)
+    - [@Inheritance](#inheritance)
+    - [@DiscriminatorColumn](#discriminatorcolumn)
+    - [@DiscriminatorValue](#discriminatorvalue)
+  - [@NamedEntityGraphs](#namedentitygraphs)
+  - [@NamedEntityGraph](#namedentitygraph)
+  - [@NamedAttributeNode](#namedattributenode)
+  - [@EntityGraph](#entitygraph)
+  - [@Query](#query)
+  - [@JsonManagedReference](#jsonmanagedreference)
+  - [@JsonBackReference](#jsonbackreference)
 
 
 
@@ -49,8 +60,11 @@ categories:
 
 
 
-
 ---
+<br/>
+
+# 
+<br/>
 
 ## @Entity
 객체와 테이블 매핑
@@ -369,6 +383,65 @@ private String description;
 
 
 
+## Embedded Type
+- 새로운 값 타입을 직접 정의해서 사용
+- 값이 속한 엔티티의 테이블에 매핑
+- 기본 생성자 필수
+- 재사용 가능
+- 응집도 높음
+  
+<img width = "30%" src = "https://user-images.githubusercontent.com/42172353/200119009-e062a963-334a-4975-8781-492edfa423a3.png" />
+<h5>[출처 - 자바 ORM 표준 JPA 프로그래밍 (김영한 저)] https://product.kyobobook.co.kr/detail/S000000935744 </h5>
+<br/><br/>
+
+
+
+### @Embedded
+- 값 타입을 사용하는 곳에 표시
+
+<br/>
+
+```java
+@Entity
+public class Member {
+    @Id @GeneratedValue
+    @Column(name = "MEMBER_ID")
+    private long id;
+
+    private String name;
+
+    @Embedded
+    private Address address;
+
+    // getter setter
+}
+```
+<br/><br/>
+
+
+### @Embeddable
+- 값 타입을 정의하는 곳에 표시
+
+<br/>
+
+```java
+@Embeddable
+public class Address {
+    private String city;
+    private String street;
+    private String zipcode;
+
+    // getter setter
+}
+```
+
+
+
+
+<br/><br/>
+
+
+
 
 ## @Transient
 - 테이블의 컬럼에 매핑되지는 않지만 비즈니스 로직 수행 등의 이유로 유지해야 하는 상태(값)가 있을 경우
@@ -401,8 +474,19 @@ private int ranking;
 - @JoinColumn(name = "조인할 컬럼")
   
 <br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>              
+<br/><br/><br/><br/><br/>
 
-              
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -417,6 +501,11 @@ private int ranking;
 
 
 ---
+<br/>
+
+# 연관 관계
+<br/>
+
 ## @OneToMany 
 - 나의 Entity(일) <- 반대편 Entity(다)
 - @OneToMany(mappedBy = "외래키 필드명")
@@ -445,7 +534,7 @@ private int ranking;
      - JPQL을 사용할 때 N+1문제가 발생 (쿼리 1개를 날리면서 추가적으로 N개의 쿼리가 나감)
 
 <br/><br/>
-<img width="575" alt="02_다대일" src="https://user-images.githubusercontent.com/42172353/197381091-a3ecedf5-4079-417b-a560-eed5c0cb3b9f.png">
+<img width="30%" alt="02_다대일" src="https://user-images.githubusercontent.com/42172353/197381091-a3ecedf5-4079-417b-a560-eed5c0cb3b9f.png">
 <h5>[출처 - 스프링과 JPA를 이용한 웹개발] http://www.kocw.net/home/cview.do?cid=5e6aec4a9ae2dd45 </h5>
 <br/><br/>
 
@@ -532,7 +621,7 @@ em.persist(item2);
 - Parent-Child 관계로 표현
 - FK 위치 : Parent, Child 중 선택 지정 가능
      
-<img width="80%" src="https://user-images.githubusercontent.com/42172353/197381092-3dc8deb3-f005-40ea-a083-ef323085dfeb.png">
+<img width="30%" src="https://user-images.githubusercontent.com/42172353/197381092-3dc8deb3-f005-40ea-a083-ef323085dfeb.png">
 <h5>[출처 - 스프링과 JPA를 이용한 웹개발] http://www.kocw.net/home/cview.do?cid=5e6aec4a9ae2dd45 </h5>
 <br/><br/><br/>
 
@@ -601,7 +690,7 @@ public class Book {
 - 보통 다대다(@ManyToMany)가 일대다, 다대일 관계로 풀어내는 연결 테이블 사용
 
 <br/>
-<img width="80%" src="https://user-images.githubusercontent.com/42172353/197381090-fdedd1e4-6d8e-49d7-aa0d-8ce36521c271.png">
+<img width="40%" src="https://user-images.githubusercontent.com/42172353/197381090-fdedd1e4-6d8e-49d7-aa0d-8ce36521c271.png">
 <h5>[출처 - 스프링과 JPA를 이용한 웹개발] http://www.kocw.net/home/cview.do?cid=5e6aec4a9ae2dd45 </h5>
 <br/><br/><br/>
 
@@ -904,12 +993,157 @@ public class Book2 extends Publication {
 
 ### @DiscriminatorColumn
 - 부모 클래스에 구분 컬럼을 지정 (자식 테이블 구분)
+<br/>
 
+```java
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // 싱글 테이블로 관리
+@DiscriminatorColumn(name = "PUB_TYPE") // 엔티티
+public abstract class Publication {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "PUBLICATION_ID", updatable = false, nullable = false)
+    protected Long id;
+
+    @Column
+    protected String title;
+
+    @Column(name = "version")
+    private int version;
+
+    //getter setter
+}
+```
+<h5>[출처 - 자바 ORM 표준 JPA 프로그래밍 (김영한 저)]</h5>
 <br/><br/>
+
+
 
 ### @DiscriminatorValue
 - 엔티티를 저장할 때 구분 컬럼에 입력할 값 지정
 - DiscriminatorColumn에 표시될 값
+<br/>
+
+```java
+@Entity
+@DiscriminatorValue("BOOK") // PUB_TYPE 컬럼에 저장될 타입명
+public class Book extends Publication {
+
+    @Column
+    private int pages; // nullable
+    
+    //getter setter
+}
+```
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+
+
+
+
+
+
+## @NamedEntityGraphs
+
+```java
+@Getter
+@Setter
+@Entity
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = "SeedStarter.withFeature",
+                attributeNodes = {
+                        @NamedAttributeNode("features")
+                }
+        ),
+        @NamedEntityGraph(
+                name = "SeedStarter.withDetail",
+                attributeNodes = {
+                        @NamedAttributeNode("details")
+                }
+        )
+})
+public class SeedStarter {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "SEED_STARTER_ID")
+    private Long id;
+
+    @OneToMany(mappedBy = "seedStarter", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Feature> features = new ArrayList<>();
+
+    @OneToMany(mappedBy = "seedStarter", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Detail> details = new ArrayList<>();
+}
+```
+
+## @NamedEntityGraph
+
+## @NamedAttributeNode
+
+
+## @EntityGraph
+1. EntityGraph.EntityGraphType.FETCH
+   - entity graph에 명시한 attribute는 EAGER로 패치
+   - 나머지 attribute는 LAZY로 패치
+2. EntityGraph.EntityGraphType.LOAD
+   - entity graph에 명시한 attribute는 EAGER로 패치
+   - 나머지 attribute는 entity에 명시한 fetch type이나 디폴트 FetchType으로 패치
+
+
+## @Query
+
+```java
+@Repository
+public interface SeedStarterRepository extends JpaRepository<SeedStarter, Long> {
+
+    @EntityGraph(value = "SeedStarter.withFeature", type = EntityGraph.EntityGraphType.LOAD)
+    @Query("SELECT DISTINCT s FROM SeedStarter s")
+    List<SeedStarter> findWithFeature();
+
+    @EntityGraph(value = "SeedStarter.withDetail", type = EntityGraph.EntityGraphType.LOAD)
+    @Query("SELECT DISTINCT s FROM SeedStarter s")
+    List<SeedStarter> findWithDetail();
+}
+```
+
+
+## @JsonManagedReference
+- 양방향 참조(Bidirectional Relationship)인 인스턴스를 JSON으로 변환하면 무한 재귀가 발생
+  
+```java
+@Entity
+public class SeedStarter {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "SEED_STARTER_ID")
+    private Long id;
+
+    @OneToMany(mappedBy = "seedStarter", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Detail> details = new ArrayList<>();
+}
+```
+
+## @JsonBackReference
+
+```java
+@Entity
+public class Feature {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "FEATURE_ID")
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SEED_STARTER_ID")
+    @JsonBackReference
+    private SeedStarter seedStarter;
+}
+```
+
 
 
 
