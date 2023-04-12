@@ -99,6 +99,15 @@ void 숫자외의값() {
 }
 ```
 
+```java
+@ParameterizedTest
+@ValueSource(strings = {"0,1,2,3,4,5", "41,42,43,44,45,46"})
+void 숫자_범위(String lottoNumbers) {
+    assertThatExceptionOfType(LottoNumberException.class)
+            .isThrownBy(() -> new ManualNumberStrategy(lottoNumbers));
+}
+```
+
 
 [공식 문서 - AssertJ Exception Assertions](https://joel-costigliola.github.io/assertj/assertj-core-features-highlight.html#exception-assertion)  
 [참고 사이트 - digitalocean.com](https://www.digitalocean.com/community/tutorials/junit-assert-exception-expected)   
