@@ -19,12 +19,27 @@ categories:
   - [@RequiredArgsConstructor](#requiredargsconstructor)
   - [@Controller](#controller)
   - [@RestController](#restcontroller)
-  - [@JsonManagedReference](#jsonmanagedreference)
-  - [@JsonBackReference](#jsonbackreference)
+  - [@ControllerAdvice](#controlleradvice)
+  - [@RestControllerAdvice](#restcontrolleradvice)
 - [API](#api)
   - [@WebServlet](#webservlet)
   - [@GetMapping](#getmapping)
+  - [@PostMapping](#postmapping)
+  - [@PutMapping](#putmapping)
+  - [@RequestBody](#requestbody)
   - [@RequestParam](#requestparam)
+  - [@PathVariable](#pathvariable)
+  - [@JsonManagedReference](#jsonmanagedreference)
+  - [@JsonBackReference](#jsonbackreference)
+- [Exception](#exception)
+  - [@ExceptionHandler](#exceptionhandler)
+  - [@ResponseStatus](#responsestatus)
+- [Test](#test)
+  - [@SpringBootTest](#springboottest)
+  - [@WebMvcTest](#webmvctest)
+  - [@RunWith](#runwith)
+  - [@ContextConfiguration](#contextconfiguration)
+  - [@AutoConfigureMockMvc](#autoconfiguremockmvc)
 
 
 
@@ -193,6 +208,16 @@ public class MemberService {
 - 테스트에서 사용 시 각각의 테스트를 실행할 떄마다 트랜잭션을 시작하고 테스트가 끝나면 트랜잭션을 강제로 롤백함
 <br/><br/>
 
+```java
+@Transactional
+public Long update(Long id, PostsUpdateRequestDto requestDto) {
+    Posts posts = postsRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+    posts.update(requestDto.getTitle(), requestDto.getContent());
+    return id;
+}
+```
+
 
 
 ## @Autowired
@@ -218,39 +243,32 @@ public class HelloController {
 }
 ```
 
-// ObjectMapper
+## @ControllerAdvice
+- @ExceptionHandler, @ModelAttribute, @InitBinder 가 적용된 메서드들을 AOP를 적용해 컨트롤러 단에 적용하기 위해 고안된 애너테이션
+
+## @RestControllerAdvice
+- @ResponseBody + @ControllerAdvice => @RestControllerAdvice 
+- 
+```java
+@Slf4j
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+}
+```
 
 
-## @JsonManagedReference
 
-## @JsonBackReference
+
+
+
+
+
 
 <br/><br/><br/><br/><br/>
 <br/><br/><br/><br/><br/>
 <br/><br/><br/><br/><br/>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
 # API
-<br/>
 
 ## @WebServlet
 서블릿 어노테이션  
@@ -283,17 +301,243 @@ public class HelloController {
     }
 }
 ```
-
 <br/>
-<br/>
-
-## @RequestParam
-외부에서 API로 넘긴 파라미터를 가져옴
 
 ```java
-@GetMapping("/hello/dto")
+@GetMapping("/api/v1/posts/{id}")
+public PostsResponseDto findById(@PathVariable Long id) {
+    return postsService.findById(id);
+}
+```
+<br/><br/>
+
+
+
+## @PostMapping
+<br/>
+
+```java
+@PostMapping("/api/v1/posts")
+public Long save(@RequestBody PostsSaveRequestDto requestDto) {
+    return postsService.save(requestDto);
+}
+```
+<br/><br/>
+
+
+
+## @PutMapping
+<br/>
+
+```java
+@PutMapping("/api/v1/posts/{id}")
+public Long update(@PathVariable Long id, @RequestBody PostsUpdateRequestDto requestDto) {
+    return postsService.update(id, requestDto);
+}
+```
+<br/><br/>
+
+
+
+## @RequestBody
+
+<br/><br/>
+
+
+## @RequestParam
+- 외부에서 API로 넘긴 파라미터를 가져옴
+- ex url) http://localhost:8000/hello?name=abc&amount=2
+
+<br/>
+
+```java
+@GetMapping("/hello")
 public HelloResponseDto helloDto(@RequestParam("name") String name, @RequestParam("amount") int amount) {
 	return new HelloResponseDto(name, amount);
+}
+```
+<br/><br/>
+
+
+## @PathVariable
+- 외부에서 API로 넘긴 파라미터를 가져옴
+- ex url) http://localhost:8000/hello/1
+
+<br/>
+
+```java
+@GetMapping("/hello/{id}")
+public HelloResponseDto findById(@PathVariable Long id) {
+    return helloService.findById(id);
+}
+```
+
+
+// ObjectMapper
+
+
+## @JsonManagedReference
+
+## @JsonBackReference
+
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+# Exception
+<br/>
+
+## @ExceptionHandler
+
+```java
+@ExceptionHandler(Exception.class)
+@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+public ApiResponse<Void> unexpectedException(Exception e) {
+    log.error("UNEXPECTED SERVER EXCEPTION >>>>> ", e);
+    return new ApiResponse<Void>(false, "500", "서버 오류가 발생했습니다 (" + e.getMessage() + ")", () -> null);
+}
+```
+
+## @ResponseStatus
+
+
+
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+# Test
+<br/>
+
+## @SpringBootTest
+
+<br/>
+
+```java
+@SpringBootTest
+class DemoApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
+```
+<br/><br/>
+
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class DemoApplicationTests {
+
+    @LocalServerPort
+    private int port;
+
+    @Test
+    public void postFeed() throws Exception{
+      // ..
+      String url = "http://localhost:" + port + "/feed/";
+      // ..
+    }
+}
+```
+
+
+
+## @WebMvcTest
+Web(Spring MVC)에 집중할 수 있는 어노테이션
+  - controllers : @Controller, @ControllerAdvice 등 사용 가능
+
+<br/>
+
+```java
+@RunWith(SpringRunner.class)
+@WebMvcTest(controllers = HelloController.class)
+class HelloControllerTest {
+
+}
+```
+<br/><br/><br/>
+
+
+
+## @RunWith
+
+
+
+<br/><br/><br/>
+
+
+
+
+## @ContextConfiguration
+
+```java
+
+```
+<br/><br/><br/>
+
+
+
+
+## @AutoConfigureMockMvc 
+-  MVC쪽만 슬라이스(slice) 테스트를 할 때 사용합니다.
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+public class MyControllerTest {
+
 }
 ```
 
@@ -304,23 +548,6 @@ public HelloResponseDto helloDto(@RequestParam("name") String name, @RequestPara
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<br/><br/><br/><br/><br/>
 <h5>
 
 [참고 서적 : 스프링 부트와 AWS로 혼자 구현하는 웹 서비스](http://www.yes24.com/Product/Goods/83849117)   
