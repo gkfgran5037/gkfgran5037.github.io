@@ -11,6 +11,7 @@ categories:
 - [@RequiredArgsConstructor](#requiredargsconstructor)
 - [@NoArgsConstructor](#noargsconstructor)
 - [Builder](#builder)
+- [@Slf4j](#slf4j)
 
 <br/><br/><br/><br/><br/>
 
@@ -48,12 +49,16 @@ public class HelloData {
 }
 ```
 
-<br/>
-<br/>
+<br/><br/>
+
 
 ## @NoArgsConstructor
 기본 생성자 자동 추가
   - public Posts() {} 와 같은 효과
+
+<br/><br/>
+
+
 
 ## Builder
 - 해당 클래스의 빌더 패턴 클래스를 생성
@@ -73,3 +78,14 @@ public class Posts {
   }
 }
 ```
+
+
+
+## @Slf4j
+- 로깅에 대한 추상 레이어를 제공하는 인터페이스의 모음
+- Logger 객체 생성 없이 바로 log.debug()로 로그 출력 가능
+  - TRACE : 추적 레벨은 Debug보다 좀더 상세한 정보를 나타냄
+  - DEBUG : 프로그램을 디버깅하기 위한 정보 지정
+  - INFO : 상태변경과 같은 정보성 메시지를 나타냄
+  - WARN : 처리 가능한 문제, 향후 시스템 에러의 원인이 될 수 있는 경고성 메시지를 나타냄
+  - ERROR : 요청을 처리하는 중 문제가 발생한 경우
