@@ -8,7 +8,7 @@ categories:
 엔티티들은 서로의 객체를 직접 조작하고 있었으며, 비즈니스 로직이 엔티티안에 있었다. 이는 결합도가 높으며 유지보수에 어려움이 있어 보여 리팩토링을 하게 됐다. 
 다음은 단계별로 리팩토링 하는 과정이다.
 - 엔티티들은 서로의 객체를 직접 조작 -> 각 엔티티의 로직만 관리, 서비스단 분리
-- 중복 코드 발생 -> 추상화 클래스로 관리
+- 중복 코드 발생 -> 추상화 클래스, 템플릿 메서드 패턴으로 관리
 
 <br/><br/><br/>
 
@@ -250,9 +250,12 @@ public void addParticipant(User user) {
    - 프로세스 ) FeedMeet 객체 조회 -> 체킹 로직 -> FeedMeet 상태 변경 -> Feed 참여인원 변경
 2. 해결 방법
    - FeedMeet 상태로 값을 변경하는 추상화 클래스 생성 (ParticipationChanger.java)
-     1. 하위 프로세스(객체 조회, 체킹 로직 등)들을 호출하는 메서드 생성 changeStatus(long feedMeetId)
-        - 자식 클래스의 실제 수행하는 부분이 됨
+     1. 템플릿 메서드 패턴 changeStatus(long feedMeetId)
+        - 전체적인 프로세스를 정의
+        - 하위 프로세스(객체 조회, 체킹 로직 등)들을 호출하는 메서드 생성
      2. 각 상태별로 다르게 구현되는 체킹 로직, 상태 변경 등은 protected 메서드로 지정
+        - 일부 로직은 추상 메서드를 호출하여 자식 클래스에서 구현하도록 위임
+        - 이를 사용하는 코드는 상세한 구현 내용에 대해서는 신경쓰지 않고도 이 메서드를 호출하여 사용할 수 있음
    - ApproveChanger.java, CancelChanger.java 등으로 자식 클래스 생성
      1. 각 상태별로 다르게 구현되는 체킹 로직, 상태 변경 등은 Override하여 구현
      2. participation.changeStatus(feedMeetId) 로 상태 변경
