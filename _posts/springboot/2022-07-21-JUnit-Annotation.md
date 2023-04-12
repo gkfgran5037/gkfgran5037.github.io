@@ -10,7 +10,6 @@ categories:
 - [@RunWith](#runwith)
 - [@ContextConfiguration](#contextconfiguration)
 - [@Transactional](#transactional)
-- [@WebMvcTest](#webmvctest)
 - [@Autiwired](#autiwired)
 - [MockMvc](#mockmvc)
 - [param](#param)
@@ -45,6 +44,13 @@ categories:
 class MemberServiceTest {
 }
 ```
+
+```java
+@RunWith(SpringRunner.class)
+@WebMvcTest(controllers = HelloController.class)
+class HelloControllerTest {
+}
+```
 <br/><br/>
 
 
@@ -67,12 +73,6 @@ class MemberServiceTest {
 <br/><br/>
 
 
-
-## @WebMvcTest
-Web(Spring MVC)에 집중할 수 있는 어노테이션
-  - controllers : @Controller, @ControllerAdvice 등 사용 가능
-
-<br/><br/>
 
 
 
